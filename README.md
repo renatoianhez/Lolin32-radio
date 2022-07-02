@@ -11,4 +11,5 @@ ESP32-audioI2S: https://github.com/schreibfaul1/ESP32-audioI2S
 TFT_eSPI: https://github.com/Bodmer/TFT_eSPI
 
 I'm sorry if in the code presented the explanations are in my native language, Brazilian Portuguese, and the radio stations are mostly from my country.
+
 I have had enough difficulties to run some radios. Some just didn't work, notably those with an HLS stream. These (some I liked a lot) I removed. But others are still there, playing with a lot of glitches. In the code, I indicate with the letters "GL" and symbols "+" those that give more or less glitches.
