@@ -15,5 +15,11 @@ ESP32-audioI2S: https://github.com/schreibfaul1/ESP32-audioI2S
 
 TFT_eSPI: https://github.com/Bodmer/TFT_eSPI
 
+Add the PSRAM:
+
+![image](https://user-images.githubusercontent.com/34423009/181618815-bb8abaf5-4f57-484a-8c8b-20fcffd7e0ec.png)
+
+https://blog.pagefault-limited.co.uk/lolin32-lite-esp32-8mb-psram-upgrade-mod
+
 After audio library updates, it is possible to play HLS streams!
 I'm assembling it in a wooden box. When it's ready I'll post it here.
