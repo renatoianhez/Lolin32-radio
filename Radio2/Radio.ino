@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <TFT_eSPI.h> // Biblioteca da tela
-#include <SPI.h> // SPI
+#include <SPI.h> // Biblioteca do SPI
 #include <WiFi.h> // Pra funcionar o WiFi
 #include "Audio.h" // Biblioteca do audio
 #include "Free_Fonts.h" // Fontes
