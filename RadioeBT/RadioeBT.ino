@@ -1,18 +1,18 @@
 #include <Arduino.h>
-#include <TFT_eSPI.h> // Biblioteca da tela
+#include <TFT_eSPI.h> // Screen lib
 #include <SPI.h> // SPI
-#include <WiFi.h> // Pra funcionar o WiFi
-#include <WiFiMulti.h> // Pra mais de um local de WiFi
-#include "Audio.h" // Biblioteca do audio
-#include "examples/320 x 240/Free_Font_Demo/Free_Fonts.h" // Fontes
-#include "BluetoothA2DPSink.h" // Para o Bluetooth
+#include <WiFi.h> // WiFi lib
+#include <WiFiMulti.h> // Multi address WiFi
+#include "Audio.h" // Audio lib
+#include "examples/320 x 240/Free_Font_Demo/Free_Fonts.h" // Fonts
+#include "BluetoothA2DPSink.h" // Bluetooth lib
 
-#define canalPraCima  0   // Botoes para mudar a estacao
+#define canalPraCima  0   // Switch stations
 #define canalPraBaixo 4
-#define I2S_DOUT      25  // Pinos do audio I2S
+#define I2S_DOUT      25  // Audio I2S pins
 #define I2S_BCLK      27
 #define I2S_LRCK      26
-#define modoAparelho  34  // Chave seletora radio-bluetooth
+#define modoAparelho  34  // Switch radio-bluetooth
 
 bool mudouEstacao;
 int radioTocando;
@@ -20,23 +20,23 @@ char* tituloBT;
 char* artistaBT;
 char* albumBT;
 
-TFT_eSPI tela = TFT_eSPI(); // Os pinos da tela sao definidos na biblioteca
+TFT_eSPI tela = TFT_eSPI(); // Screen pins are in library
 Audio audio;
 BluetoothA2DPSink a2dp_sink;
 WiFiMulti outrosWiFi;
 bool connected = true;
 
-//Radios e enderecos
+//Radios and URL's
 const char* nomeRadio[30] = {
-  "Antena 1",   // 0
-  "Kiss",       // 1
-  "Eldorado FM",   // 2
-  "Cultura", // 3
-  "Itatiaia",   // 4
-  "Dominicana",     // 5
-  "BFF.fm",   // 6
-  "Saudade",    // 7
-  "Radio USP",     // 8
+  "Antena 1",
+  "Kiss",
+  "Eldorado FM", 
+  "Cultura",
+  "Itatiaia", 
+  "Dominicana",  
+  "BFF.fm", 
+  "Saudade", 
+  "Radio USP", 
   "CBN BH",
   "Radio UFMG",
   "Tribuna",
@@ -124,28 +124,28 @@ const char* cidadeRadio[30] = {
   "Vitoria ES",
   "Londres - UK"
 };
-String urlRadio[] = {
-  "https://antenaone.crossradio.com.br/stream/1;", // Antena 1 OK
+String urlRadio[] = {    // GL = glitches, OK = no glitches
+  "https://antenaone.crossradio.com.br/stream/1;", // Antena 1 OK no tags
   "http://cloud2.cdnseguro.com:23538/;", // Kiss FM OK
-  "https://eldoradolive02.akamaized.net/hls/live/2043453/eldorado/master.m3u8", // Eldorado
-  "https://radiocultura2.jmvstream.com/stream", // Cultura OK
+  "https://eldoradolive02.akamaized.net/hls/live/2043453/eldorado/master.m3u8", // Eldorado OK no tags
+  "https://radiocultura2.jmvstream.com/stream", // Cultura OK no tags
   "http://8903.brasilstream.com.br:8903/stream?1616578451161", // Itatiaia OK
   "http://radio.domiplay.net:2002/;", // Dominicana OK
-  "https://ais-sa2.cdnstream1.com/2053_128.mp3", // BFF.FM
+  "https://ais-sa2.cdnstream1.com/2053_128.mp3", // BFF.FM GL
   "https://24073.live.streamtheworld.com/SAUDADE_FMAAC.aac", // Saudade OK
-  "http://flow.emm.usp.br:8007/radiousp-128.mp3", // USP OK
+  "http://flow.emm.usp.br:8007/radiousp-128.mp3", // USP OK no tags
   "https://26513.live.streamtheworld.com/CBN_BHAAC.aac", // CBN OK
   "http://150.164.63.210:8000/aovivo.mp3", // UFMG OK no tags
   "http://cast.midiaip.com.br:6060/stream?1506557548760", // Tribuna GL+
-  "https://hestia2.cdnstream.com/1078_128?cb=696226.mp3",  // Smooth Jazz
-  "http://cast.loungefm.com.ua/acoustic128?1410329161003.mp3", // Louge FM
+  "https://hestia2.cdnstream.com/1078_128?cb=696226.mp3",  // Smooth Jazz GL
+  "http://cast.loungefm.com.ua/acoustic128?1410329161003.mp3", // Louge FM GL
   "https://24083.live.streamtheworld.com/JBFMAAC.aac", // JB GL+
-  "https://chantefranceemotion.ice.infomaniak.ch/chantefranceemotion-96.aac", // Chante France
-  "http://s2.stationplaylist.com:9460/guerrilla", // Guerrilla
+  "https://chantefranceemotion.ice.infomaniak.ch/chantefranceemotion-96.aac", // Chante France GL
+  "http://s2.stationplaylist.com:9460/guerrilla", // Guerrilla OK
   "https://s7-webradio.oldie-antenne.de/oldie-antenne", // Antenne Oldies GL+++
   "http://20323.live.streamtheworld.com/RADIO_ALVORADAAAC_SC", // Alvorada OK
-  "https://s17.maxcast.com.br:8783/live", // Sarau
-  "https://nos.radio.br/stream/8/;", // RadioNOS
+  "https://s17.maxcast.com.br:8783/live", // Sarau OK
+  "https://nos.radio.br/stream/8/;", // RadioNOS OK
   "https://8446.brasilstream.com.br/stream", // Inconfidencia FM OK
   "http://euroticast5.euroti.com.br:8070/;", // Axe BA OK
   "http://50.3.30.111:8042/stream", // Seresta ao Luar OK
@@ -159,26 +159,26 @@ String urlRadio[] = {
 
 void sobeCanal() {
   // Se apertar o botao pra subir uma estacao:
-  radioTocando = radioTocando + 1;          // incrementa o indice
+  radioTocando = radioTocando + 1;          // increments index
   tela.fillScreen(TFT_BLACK);
   tela.setTextColor(TFT_RED, TFT_WHITE);
   tela.setCursor(0, 0, 4);
   tela.println("Sintonizando!");
-  delay(1000); // uma pausa pra largar o botao
-  if (radioTocando > 29) {     // Testa se passou da ultima estacao da lista
-    radioTocando = 0;         // se sim vai pra primeira da playlist
+  delay(1000); // delay for button
+  if (radioTocando > 29) {     // Tests if is the last station of list
+    radioTocando = 0;         // if yes, go to the first
   }
 }
 
 void desceCanal() {
-  radioTocando = radioTocando - 1;        // decrementa o indice
+  radioTocando = radioTocando - 1;        // decrements the index
   tela.fillScreen(TFT_BLACK);
   tela.setCursor(0, 0, 4);
   tela.setTextColor(TFT_RED, TFT_WHITE);
   tela.println("Sintonizando!");
   delay(1000); // uma pausa pra largar o botao
-  if (radioTocando < 0) {     // Testa se passou pra baixo da primeira da lista
-    radioTocando = 29;      // se sim vai pra ultima da playlist
+  if (radioTocando < 0) { 
+    radioTocando = 29; 
   }
 }
 
@@ -188,8 +188,8 @@ void mudouEstacaoMesmo() {
   tela.fillRect(0, 0, 160, 28, TFT_WHITE);
   int centro = 77 - (11 * ((strlen(nomeRadio[radioTocando])) / 2));
   tela.setCursor(centro, 18);
-  tela.setTextColor(TFT_BLUE); //texto azul
-  tela.println(nomeRadio[radioTocando]); // nome da radio centralizado
+  tela.setTextColor(TFT_BLUE); //blue text
+  tela.println(nomeRadio[radioTocando]); // centralizes radio name
   tela.setTextFont(2);
   tela.setCursor(0, 30);
   tela.setTextColor(TFT_ORANGE);
@@ -205,12 +205,12 @@ void audio_info(const char *info) {
   Serial.println(info);
 }
 
-void audio_showstreamtitle(const char *titulo) { // Pra mostrar o nome da musica e cantor
+void audio_showstreamtitle(const char *titulo) { // To show tags
   tela.setCursor(0, 60, 2);
   tela.setTextColor(TFT_CYAN, TFT_BLACK);
   tela.println("Tocando agora:");
   tela.setCursor(0, 75, 2);
-  tela.println("                                                                                    "); //Pra limpar
+  tela.println("                                                                                    "); //Clean tags
   tela.setCursor(0, 75, 2);
   tela.println(titulo);
 }
@@ -221,7 +221,7 @@ void avrc_metadata_callback(uint8_t id, const uint8_t *text) {
   tela.fillScreen(TFT_BLACK);
   tela.fillRect(0, 0, 160, 28, TFT_WHITE);
   tela.setCursor(28, 18);
-  tela.setTextColor(TFT_BLUE); //texto azul
+  tela.setTextColor(TFT_BLUE); 
   tela.println("BLUETOOTH");
   tela.setTextFont(2);
   tela.setCursor(0, 30);
@@ -245,34 +245,34 @@ void avrc_metadata_callback(uint8_t id, const uint8_t *text) {
 }
 
 void setup() {
-  pinMode(canalPraCima, INPUT_PULLUP); // Modo dos botoes
+  pinMode(canalPraCima, INPUT_PULLUP); // Button mode
   pinMode(canalPraBaixo, INPUT_PULLUP);
   pinMode(modoAparelho, INPUT);
-  Serial.begin( 115200 ); // inicia o serial
-  tela.init(); // Inicia o display
-  tela.setRotation(1); // Modo paisagem
-  tela.invertDisplay(1); // Necessario para acertar as cores
-  outrosWiFi.addAP("Renato", "abacatequecaiudope"); // Dados do WiFi local
-  //outrosWiFi.addAP("Argemiro", "zenaide2");
+  Serial.begin( 115200 );
+  tela.init(); // Display init
+  tela.setRotation(1); // Screen mode portrait
+  tela.invertDisplay(1); // Color adjust for the TFT
+  outrosWiFi.addAP("xxx", "xxx"); // WiFi data
+  //outrosWiFi.addAP("xxx", "xxx"); // Others WiFi
   //outrosWiFi.addAP("xxx","xxx");
 
-  if (digitalRead(modoAparelho)) {
-    radioTocando = random(0, 30); // Sorteia e primeira estacao
+  if (digitalRead(modoAparelho)) {  //If radio mode
+    radioTocando = random(0, 30); // Sort the first station
     mudouEstacao = true;
-    WiFi.disconnect(); // Confere se o WiFi ta desligado
+    WiFi.disconnect(); // Wifi connection
     WiFi.mode(WIFI_STA);
-    while (outrosWiFi.run() != WL_CONNECTED) delay(1500); // Tenta conectar nas redes
+    while (outrosWiFi.run() != WL_CONNECTED) delay(1500);
 
-    audio.setPinout(I2S_BCLK, I2S_LRCK, I2S_DOUT); // Configura o audio
-    audio.setVolume(16); // volume vai de zero a 21
-    // audio.setConnectionTimeout(2000, 7200); // Garante a conexao as estacoes
-    audio.setTone(4, 0, 4); // Equalizador grave - medio - agudo (-40 a 6)
+    audio.setPinout(I2S_BCLK, I2S_LRCK, I2S_DOUT); // Radio config
+    audio.setVolume(16); // volume zero to 21
+    // audio.setConnectionTimeout(2000, 7200); // Grant connection
+    audio.setTone(4, 0, 4); // Equalizator bass - mid - terble (-40 to 6)
     audio.setBufsize(0, 4000000);
-    // audio.forceMono(true); // Força o mono
-    // audio.setBalance(0); // Balanco estereo direito - esquerdo (-16 a 16)
+    // audio.forceMono(true); // Mono
+    // audio.setBalance(0); // Balance (-16 to 16)
   }
   else {
-    i2s_pin_config_t my_pin_config = {
+    i2s_pin_config_t my_pin_config = {  //If Bluetooth mode
       .bck_io_num = 27,
       .ws_io_num = 26,
       .data_out_num = 25,
@@ -286,19 +286,19 @@ void setup() {
 }
 
 void loop() {
-  if (digitalRead(modoAparelho)) {
+  if (digitalRead(modoAparelho)) { // If the mode switch is radio
     audio.loop();
-    if (digitalRead(canalPraCima) == LOW) {//Se apertar o botao pra subir a estacao
+    if (digitalRead(canalPraCima) == LOW) {//If up station
       sobeCanal();
-      mudouEstacao = true;   // Avisa la que mudou de estacao!
+      mudouEstacao = true;
     }
-    if (digitalRead(canalPraBaixo) == LOW) {//Se apertar o botao para descer a estacao:
+    if (digitalRead(canalPraBaixo) == LOW) {//If down station
       desceCanal();
-      mudouEstacao = true;  //Avisa la que mudou de estacao tambem!
+      mudouEstacao = true;
     }
-    if (mudouEstacao) {     //Se a estacao mudou, atualiza o LCD e o terminal
+    if (mudouEstacao) {  
       mudouEstacaoMesmo();
-      mudouEstacao = false; // Mantem a estacao que esta tocando
+      mudouEstacao = false;
     }
   }
 }
