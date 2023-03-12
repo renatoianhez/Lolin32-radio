@@ -1,6 +1,6 @@
 # Lolin32-radio
 This is another project like others out there: a web radio with ESP32.
-This one uses Lolin32 Lite a 1.8'' SPI screen and I2S as audio output for two options:
+This one uses Lolin32 Lite (with a PSRAM update), a 1.8'' SPI screen and I2S as audio output for two options:
 1) PCM5102 + PAM8403
 
 ![image](https://user-images.githubusercontent.com/34423009/181617742-05e01f1f-c92b-476c-ba6e-c9308f2834ec.png)
