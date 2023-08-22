@@ -26,3 +26,4 @@ I'm assembling it in a wooden box.
 ![Imagem do WhatsApp de 2023-02-05 à(s) 17 16 38](https://user-images.githubusercontent.com/34423009/216842651-7298a861-359e-4c44-aa80-7afa5a5a34c8.jpg)
 
 New update: I put a bluetooth mode through an SPDT switch. Look in the RadioeBT folder.
+The best update so far: it's possible to update your list of radio stations via a text file in GIST! See it on RadioWeb example.
