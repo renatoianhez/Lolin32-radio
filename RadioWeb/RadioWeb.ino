@@ -42,6 +42,7 @@ String endTudo = "https://gist.githubusercontent.com/XXX/XXX/raw"; // Place here
       //   Type of station (Web or FM) and genre ex. Web - Rock/Alternative
       //   Station's stream URL ex. https://antenaone.crossradio.com.br/stream/1;
       //  Attention: you must enter the data of 30 radio stations!
+      //  Example: https://gist.githubusercontent.com/renatoianhez/4b5726d5ef32ad0a24fa3db6521989d6/raw
 
 int indice = 0;
 
