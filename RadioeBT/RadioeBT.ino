@@ -252,7 +252,7 @@ void setup() {
   tela.init(); // Display init
   tela.setRotation(1); // Screen mode portrait
   tela.invertDisplay(1); // Color adjust for the TFT
-  outrosWiFi.addAP("xxx", "xxx"); // WiFi data
+  outrosWiFi.addAP("xxx", "xxx"); // WiFi data (user, passw)
   //outrosWiFi.addAP("xxx", "xxx"); // Others WiFi
   //outrosWiFi.addAP("xxx","xxx");
 
