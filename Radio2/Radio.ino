@@ -148,8 +148,8 @@ String urlRadio[] = {
   "https://eu10.fastcast4u.com/tonicska" // Tonic Ska GL++
 };
 
-String nomedaRede = ("Renato"); // Dados do WiFi local
-String senhadaRede = ("abacatequecaiudope");
+String nomedaRede = ("user"); // Dados do WiFi local
+String senhadaRede = ("password");
 
 void setup() {
   pinMode(canalPraCima, INPUT_PULLUP); // Modo dos botoes
