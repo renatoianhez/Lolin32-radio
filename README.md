@@ -1,7 +1,10 @@
 # Lolin32-radio
 This is another project like others out there: a web radio with ESP32.
+
 New update: I put a bluetooth mode through an SPDT switch. Look in the RadioeBT folder.
+
 The best update so far: it's possible to update your list of radio stations via a text file in GIST! See it on RadioWeb example.
+
 
 This radio uses Lolin32 Lite (with a PSRAM update), a 1.8'' SPI screen and I2S as audio output for two options:
 1) PCM5102 + PAM8403
