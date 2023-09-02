@@ -236,6 +236,8 @@ void avrc_metadata_callback(uint8_t id, const uint8_t *text) {
       albumBT = (char*) text;
       break;
   }
+  tela.setTextColor(TFT_ORANGE);
+  tela.println(a2dp_sink.get_peer_name());  // Shows the name of source
   tela.setTextColor(TFT_PINK);
   tela.println(tituloBT);
   tela.setTextColor(TFT_YELLOW);
