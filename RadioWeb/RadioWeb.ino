@@ -97,7 +97,7 @@ void desceCanal() {
   }
 }
 
-void mudouEstacaoMesmo() {
+void mudouEstacaoMesmo() {  // If change the station it will update the screen
   tela.setFreeFont(FF5);
   tela.fillScreen(TFT_BLACK);
   tela.fillRect(0, 0, 160, 28, TFT_WHITE);
@@ -120,7 +120,7 @@ void audio_info(const char *info) {
   Serial.println(info);
 }
 
-void audio_showstreamtitle(const char *titulo) { // Display tags
+void audio_showstreamtitle(const char *titulo) { // Display and update music tags
   tela.setCursor(0, 60, 2);
   tela.setTextColor(TFT_CYAN, TFT_BLACK);
   tela.println("Tocando agora:");
@@ -151,6 +151,8 @@ void avrc_metadata_callback(uint8_t id, const uint8_t *text) {
       albumBT = (char*) text;
       break;
   }
+  tela.setTextColor(TFT_ORANGE);
+  tela.println(a2dp_sink.get_peer_name());  // Shows the source name
   tela.setTextColor(TFT_PINK);
   tela.println(tituloBT);
   tela.setTextColor(TFT_YELLOW);
