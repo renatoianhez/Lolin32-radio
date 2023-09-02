@@ -9,7 +9,8 @@ The best update so far: it's possible to update your list of radio stations via 
 This radio uses Lolin32 Lite (with a PSRAM update), a 1.8'' SPI screen and I2S as audio output for two options:
 1) PCM5102 + PAM8403
 
-![image](https://user-images.githubusercontent.com/34423009/181617742-05e01f1f-c92b-476c-ba6e-c9308f2834ec.png)
+![image](https://github.com/renatoianhez/Lolin32-radio/assets/34423009/2f8a6b8d-9032-43c8-afa7-e9579d9a7465)
+
 
 ![Imagem do WhatsApp de 2023-09-02 à(s) 07 04 51](https://github.com/renatoianhez/Lolin32-radio/assets/34423009/e910bc64-a126-4ef0-807a-72b605f8932b)
 
