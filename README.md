@@ -8,7 +8,8 @@ The best update so far: it's possible to update your list of radio stations via 
 
 This radio uses Lolin32 Lite (with a PSRAM update), a 1.8'' SPI screen and I2S with PCM5102 + PAM8403 amp:
 
-![image](https://github.com/renatoianhez/Lolin32-radio/assets/34423009/eca303cb-7ebb-4cda-8960-a2719170ab75)
+![image](https://github.com/renatoianhez/Lolin32-radio/assets/34423009/a30e7724-32ee-49d0-93e9-ccdccdb0904d)
+
 
 
 The libraries used are:
