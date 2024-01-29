@@ -72,26 +72,26 @@ void baixaDados(const String& urlDado, int maxTokens, String* tokens) {
   }
 }
 
-void sobeCanal() {
-  // Se apertar o botao pra subir uma estacao:
+void sobeCanal() {  // Up channel
+  // If switch button to change station:
   radioTocando = radioTocando + 1;          // increments the index
   tela.fillScreen(TFT_BLACK);
   tela.setTextColor(TFT_RED, TFT_WHITE);
   tela.setCursor(0, 0, 4);
-  tela.println("Sintonizando!");
-  delay(1000); // uma pausa pra largar o botao
-  if (radioTocando > 29) { 
+  tela.println("Sintonizing!");
+  delay(1000); // A pause to leave the button
+  if (radioTocando > 29) { // if the next station is the 0 on list
     radioTocando = 0; 
   }
 }
 
-void desceCanal() {
+void desceCanal() { // Down channel
   radioTocando = radioTocando - 1;        // decrements the index
   tela.fillScreen(TFT_BLACK);
   tela.setCursor(0, 0, 4);
   tela.setTextColor(TFT_RED, TFT_WHITE);
-  tela.println("Sintonizando!");
-  delay(1000); // uma pausa pra largar o botao
+  tela.println("Sintonizing!");
+  delay(1000); // A pause to leave the button
   if (radioTocando < 0) {    
     radioTocando = 29;     
   }
@@ -174,13 +174,13 @@ void setup() {
   //outrosWiFi.addAP("xxx","xxx");
 
   if (digitalRead(modoAparelho)) {
-    radioTocando = random(0, 30); // The first station is randomized
+    radioTocando = random(0, 30); // The first station is a surprise!
     mudouEstacao = true;
     WiFi.disconnect(); 
     WiFi.mode(WIFI_STA);
     while (outrosWiFi.run() != WL_CONNECTED) delay(1500); 
     audio.setPinout(I2S_BCLK, I2S_LRCK, I2S_DOUT); 
-    audio.setVolume(16); // volume vai de zero a 21
+    audio.setVolume(16); // audio volume is 0 to 21 
     audio.setConnectionTimeout(2000, 7200); 
     audio.setTone(4, 0, 4); // Equalizator bass - mid - terble (-40 to 6)
     // audio.setBufsize(0, 4000000);
@@ -205,7 +205,7 @@ void setup() {
     a2dp_sink.set_pin_config(my_pin_config);
     a2dp_sink.set_avrc_metadata_callback(avrc_metadata_callback);
     a2dp_sink.set_auto_reconnect(true);
-    a2dp_sink.start("BTRadio");
+    a2dp_sink.start("BTRadio");  // The name of Bluetooth (you can change)
   }
 }
 
