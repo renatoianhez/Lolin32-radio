@@ -6,7 +6,7 @@ New update: I put a bluetooth mode through an SPDT switch. Look in the RadioeBT 
 The best update so far: it's possible to update your list of radio stations via a text file in GIST! See it on RadioWeb example. This is important because radio stations often change their URLs. In my case, as I make the radio sets as gifts to my friends, I won't need to get the sets back to update them. Although it is a good reason to visit them!
 
 
-This radio uses Lolin32 Lite (with a PSRAM update), a 1.8'' SPI screen and I2S with PCM5102 + PAM8403 amp:
+This radio uses Lolin32 Lite (with a PSRAM update, which makes it equivalent to an ESP32 WROVER), a 1.8'' SPI screen and I2S with PCM5102 + PAM8403 amp:
 
 ![image](https://github.com/renatoianhez/Lolin32-radio/assets/34423009/a30e7724-32ee-49d0-93e9-ccdccdb0904d)
 
