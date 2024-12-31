@@ -27,7 +27,8 @@ Add the PSRAM:
 https://blog.pagefault-limited.co.uk/lolin32-lite-esp32-8mb-psram-upgrade-mod
 
 With PSRAM, the Lolin32 Lite works like a WROVER Kit. The Arduino IDE configuration looks like this:
-![image](https://github.com/renatoianhez/Lolin32-radio/assets/34423009/4e41741a-bfe2-4414-92fb-be47e240eec3)
+![image](https://github.com/user-attachments/assets/d0b6b8d4-adf1-4a61-b563-b1994e4caae8)
+
 
 
 After audio library updates, it is possible to play HLS streams!
