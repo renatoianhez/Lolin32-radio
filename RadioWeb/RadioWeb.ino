@@ -1,20 +1,20 @@
-#include <ESP_I2S.h>
-#include <wav_header.h>
+#include <ESP_I2S.h> // I2S library for bluetooth
+#include <wav_header.h> //Required for the above library
 #include <Arduino.h>
-#include <TFT_eSPI.h> // Biblioteca da tela
+#include <TFT_eSPI.h> // Screen library
 #include <SPI.h> // SPI
-#include <WiFiMulti.h> // Pra mais de um local de WiFi
-#include "Audio.h" // Biblioteca do audio
-#include "examples/320 x 240/Free_Font_Demo/Free_Fonts.h" // Fontes
-#include "BluetoothA2DPSink.h" // Para o Bluetooth
-#include <HTTPClient.h>
+#include <WiFiMulti.h> // For more than one WiFi location
+#include "Audio.h" // Audio lib
+#include "examples/320 x 240/Free_Font_Demo/Free_Fonts.h" // Fonts
+#include "BluetoothA2DPSink.h" // For Bluetooth
+#include <HTTPClient.h> // To access the radio station information link
 
-#define canalPraCima  15   // 0 nos antigos - Botoes para mudar a estacao
+#define canalPraCima  0   // 0 for Lolin32 - 15 for Wrover - Buttons to change the radio station
 #define canalPraBaixo 4
-#define I2S_DOUT      25  // Pinos do audio I2S
+#define I2S_DOUT      25  // Audio I2S pins
 #define I2S_BCLK      27
 #define I2S_LRCK      26
-#define modoAparelho  34  // Chave seletora radio-bluetooth
+#define modoAparelho  34  // Radio-Bluetooth selector switch
 
 bool mudouEstacao;
 int radioTocando;
@@ -22,7 +22,7 @@ char* tituloBT;
 char* artistaBT;
 char* albumBT;
 
-TFT_eSPI tela = TFT_eSPI(); // Os pinos da tela sao definidos na biblioteca
+TFT_eSPI tela = TFT_eSPI(); // ATTENTION The screen pins are defined in the library
 Audio audio;
 I2SClass i2s;
 BluetoothA2DPSink a2dp_sink(i2s);
@@ -45,10 +45,10 @@ void baixaDados(const String& urlDado, int maxTokens, String* tokens) {
   int httpCode = http.GET();
   if (httpCode == HTTP_CODE_OK) {
     conteudoBaixado = http.getString();
-    Serial.println("Arquivo de dados das radios baixado com sucesso");
+    Serial.println("Radio data file downloaded successfully");
   }
   else {
-    Serial.printf("Falha ao baixar o arquivo. Código de erro HTTP: %d\n", httpCode);
+    Serial.printf("Failed to download file. HTTP error code: %d\n", httpCode);
   }
   http.end();
   int startIndex = 0;
@@ -67,27 +67,27 @@ void baixaDados(const String& urlDado, int maxTokens, String* tokens) {
 }
 
 void sobeCanal() {
-  // Se apertar o botao pra subir uma estacao:
-  radioTocando = radioTocando + 1;          // incrementa o indice
+  // If you press the button to go up one station:
+  radioTocando = radioTocando + 1;          // increase the index
   tela.fillScreen(TFT_BLACK);
   tela.setTextColor(TFT_RED, TFT_WHITE);
   tela.setCursor(0, 0, 4);
   tela.println("Sintonizando!");
-  delay(1000); // uma pausa pra largar o botao
-  if (radioTocando > 29) {     // Testa se passou da ultima estacao da lista
-    radioTocando = 0;         // se sim vai pra primeira da playlist
+  delay(1000); // a break to release the button
+  if (radioTocando > 29) {     // Test if you have passed the last station on the list
+    radioTocando = 0;         // if yes, go to the first station of the playlist
   }
 }
 
 void desceCanal() {
-  radioTocando = radioTocando - 1;        // decrementa o indice
+  radioTocando = radioTocando - 1;        // decrements the index
   tela.fillScreen(TFT_BLACK);
   tela.setCursor(0, 0, 4);
   tela.setTextColor(TFT_RED, TFT_WHITE);
   tela.println("Sintonizando!");
   delay(1000); // uma pausa pra largar o botao
-  if (radioTocando < 0) {     // Testa se passou pra baixo da primeira da lista
-    radioTocando = 29;      // se sim vai pra ultima da playlist
+  if (radioTocando < 0) {     // Test if it passed below the first on the list
+    radioTocando = 29;      // If yes, go to the last one on the playlist.
   }
 }
 
@@ -97,8 +97,8 @@ void mudouEstacaoMesmo() {
   tela.fillRect(0, 0, 160, 28, TFT_WHITE);
   int centro = 77 - (11 * ((nomeRadio[radioTocando].length())) / 2);
   tela.setCursor(centro, 18);
-  tela.setTextColor(TFT_BLUE); //texto azul
-  tela.println(nomeRadio[radioTocando]); // nome da radio centralizado
+  tela.setTextColor(TFT_BLUE); //blue text
+  tela.println(nomeRadio[radioTocando]); // centralized radio name
   tela.setTextFont(2);
   tela.setCursor(0, 30);
   tela.setTextColor(TFT_ORANGE);
@@ -114,23 +114,23 @@ void audio_info(const char *info) {
   Serial.println(info);
 }
 
-void audio_showstreamtitle(const char *titulo) { // Pra mostrar o nome da musica e cantor
+void audio_showstreamtitle(const char *titulo) { // To show the name of the song and singer (some stations do not provide this)
   tela.setCursor(0, 60, 2);
   tela.setTextColor(TFT_CYAN, TFT_BLACK);
-  tela.println("Tocando agora:");
+  tela.println("Playing now:");
   tela.setCursor(0, 75, 2);
-  tela.println("                                                                                    "); //Pra limpar
+  tela.println("                                                                                    "); //To clean names
   tela.setCursor(0, 75, 2);
   tela.println(titulo);
 }
 
-void avrc_metadata_callback(uint8_t id, const uint8_t *text) {
+void avrc_metadata_callback(uint8_t id, const uint8_t *text) {  // Routine to show music data in bluetooth mode
   Serial.printf("==> AVRC metadata rsp: attribute id 0x%x, %s\n", id, text);
   tela.setFreeFont(FF5);
   tela.fillScreen(TFT_BLACK);
   tela.fillRect(0, 0, 160, 28, TFT_WHITE);
   tela.setCursor(28, 18);
-  tela.setTextColor(TFT_BLUE); //texto azul
+  tela.setTextColor(TFT_BLUE);
   tela.println("BLUETOOTH");
   tela.setTextFont(2);
   tela.setCursor(0, 30);
@@ -157,32 +157,31 @@ void avrc_metadata_callback(uint8_t id, const uint8_t *text) {
 }
 
 void setup() {
-  pinMode(canalPraCima, INPUT_PULLUP); // Modo dos botoes
+  pinMode(canalPraCima, INPUT_PULLUP); // Button mode
   pinMode(canalPraBaixo, INPUT_PULLUP);
   pinMode(modoAparelho, INPUT);
-  Serial.begin( 115200 ); // inicia o serial
-  tela.init(); // Inicia o display
-  tela.setRotation(1); // Modo paisagem
-  tela.invertDisplay(0); // Necessario para acertar as cores
+  Serial.begin( 115200 ); // start the serial
+  tela.init(); // Start display
+  tela.setRotation(1); // Landscape mode
+  tela.invertDisplay(0); // Necessary to get the colors right. If the colors are inverted, try 1
 
-  if (digitalRead(modoAparelho)) {
-    radioTocando = random(0, 30); // Sorteia e primeira estacao
+  if (digitalRead(modoAparelho)) {  // Radio setups
+    radioTocando = random(0, 30); // The first station is drawn
     mudouEstacao = true;
-    WiFi.disconnect(); // Confere se o WiFi ta desligado
+    WiFi.disconnect(); // Check if the WiFi is turned off
     WiFi.mode(WIFI_STA);
-    outrosWiFi.addAP("Renato", "abacatequecaiudope"); // Dados do WiFi local
+    outrosWiFi.addAP("SSID", "password"); // Local WiFi data
     //outrosWiFi.addAP("xxx", "xxx");
     //outrosWiFi.addAP("xxx","xxx");
-    while (outrosWiFi.run() != WL_CONNECTED) delay(1500); // Tenta conectar nas redes
-    audio.setPinout(I2S_BCLK, I2S_LRCK, I2S_DOUT); // Configura o audio
-    audio.setVolume(16); // volume vai de zero a 21
-    // audio.setConnectionTimeout(2000, 7200); // Garante a conexao as estacoes
-    audio.setTone(0, 6, 4); // Equalizador grave - medio - agudo (-40 a 6)
+    while (outrosWiFi.run() != WL_CONNECTED) delay(1500); // Try connecting to networks
+    audio.setPinout(I2S_BCLK, I2S_LRCK, I2S_DOUT); // Audio setup
+    audio.setVolume(16); // volume goes from zero to 21
+    audio.setTone(0, 6, 4); // Bass - mid - treble equalizer (-40 a 6)
     // audio.setBufsize(0, 4000000);
-    // audio.forceMono(true); // Força o mono
-    // audio.setBalance(0); // Balanco estereo direito - esquerdo (-16 a 16)
-    baixaDados(endTudo, 120, tudo); // Baixa dados das radios
-    for (int j = 0; j < 120; j = j + 4) { // Separa os dados
+    // audio.forceMono(true); // Force mono
+    // audio.setBalance(0); // Right - Left Stereo Balance (-16 a 16)
+    baixaDados(endTudo, 120, tudo); // Download radio stations data
+    for (int j = 0; j < 120; j = j + 4) { // Separate the data
       nomeRadio[indice] = tudo[j];
       tipoRadio[indice] = tudo[(j + 1)];
       cidadeRadio[indice] = tudo[(j + 2)];
@@ -190,7 +189,7 @@ void setup() {
       indice++;
     }
   }
-  else {
+  else {  // Bluetooth setups
    i2s.setPins(I2S_BCLK, I2S_LRCK, I2S_DOUT);
     if (!i2s.begin(I2S_MODE_STD, 44100, I2S_DATA_BIT_WIDTH_16BIT, I2S_SLOT_MODE_STEREO, I2S_STD_SLOT_BOTH)) {
       Serial.println("Failed to initialize I2S!");
@@ -205,17 +204,17 @@ void setup() {
 void loop() {
   if (digitalRead(modoAparelho)) {
     audio.loop();
-    if (digitalRead(canalPraCima) == LOW) {//Se apertar o botao pra subir a estacao
+    if (digitalRead(canalPraCima) == LOW) {// If you press the button to go up the station
       sobeCanal();
-      mudouEstacao = true;   // Avisa la que mudou de estacao!
+      mudouEstacao = true;   // Let them know that the station has changed!
     }
-    if (digitalRead(canalPraBaixo) == LOW) {//Se apertar o botao para descer a estacao:
+    if (digitalRead(canalPraBaixo) == LOW) {// If you press the button to go down the station:
       desceCanal();
-      mudouEstacao = true;  //Avisa la que mudou de estacao tambem!
+      mudouEstacao = true;  // Let them know that you've changed station too!
     }
-    if (mudouEstacao) {     //Se a estacao mudou, atualiza o LCD e o terminal
+    if (mudouEstacao) {     // If the station has changed, update the LCD and the terminal
       mudouEstacaoMesmo();
-      mudouEstacao = false; // Mantem a estacao que esta tocando
+      mudouEstacao = false; // Keep the station that is playing
     }
   }
 }
