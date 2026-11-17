@@ -5,6 +5,10 @@ New update: I put a bluetooth mode through an SPDT switch. Look in the RadioeBT 
 
 The best update so far: it's possible to update your list of radio stations via a text file in GIST! See it on RadioWeb example. This is important because radio stations often change their URLs. In my case, as I make the radio sets as gifts to my friends, I won't need to get the sets back to update them. Although it is a good reason to visit them!
 
+The ultimate update! a) The WiFi network can now be configured by the user! Up to 3 WiFi networks can be used!; b) This version eliminates most of the 'drop-outs' in radio stream transmissions, especially for weaker signals; c) A fix has been implemented to prevent sound distortion over Bluetooth.
+
+We are waiting for more affordable ESP32 S31 modules!
+
 
 This radio uses Lolin32 Lite (with a PSRAM update, which makes it equivalent to an ESP32 WROVER), a 1.8'' SPI screen and I2S with PCM5102 + PAM8403 amp:
 
